@@ -51,7 +51,7 @@ app.post("/summary", async (req, res) => {
       messages: [
         {
           role: "assistant",
-          content: `Please summarize the given paragraph/article and try to make it brief but don't missout keywords and the meaning of article/paragraph. **${paragraph}**`,
+          content: `Please provide a concise summary of the key points, insights, and important details from the following multi-type documents/articles (list the document/article titles or content descriptions here). Summarize the content, highlighting any common themes or significant differences, and make sure to capture the most crucial information. Additionally, please analyze the overarching message or main takeaways. **${paragraph}**`,
         },
       ],
       temperature: 1.5,
@@ -76,14 +76,14 @@ app.post("/translation", async (req, res) => {
       messages: [
         {
           role: "assistant",
-          content: `Translate the following text into "${language}":  **${message}**.`,
+          content: `Translate the following message into [${language}]: '[${message}]'`,
         },
       ],
-      temperature: 1.5,
-      max_tokens: 279,
+      temperature: 1,
+      max_tokens: 1011,
       top_p: 1,
-      frequency_penalty: 1.01,
-      presence_penalty: 1.03,
+      frequency_penalty: 0,
+      presence_penalty: 0,
     });
     // console.log(response.choices);
     res.status(200).send({ msg: response.choices[0].message.content });
@@ -95,4 +95,3 @@ app.post("/translation", async (req, res) => {
 app.listen(8080, () => {
   console.log("Server is live at Port 8080");
 });
-
