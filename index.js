@@ -85,7 +85,38 @@ app.post("/translation", async (req, res) => {
       frequency_penalty: 0,
       presence_penalty: 0,
     });
-    // console.log(response.choices);
+    res.status(200).send({ msg: response.choices[0].message.content });
+  } catch (error) {
+    res.status(400).send({ error: error });
+  }
+});
+
+//sentiment analyses
+app.post("/sentiment-analysis", async (req, res) => {
+  const { userMsg, language } = req.body;
+  try {
+    const response = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "system",
+          content: "You are a sentiment analysis model.",
+        },
+        {
+          role: "user",
+          content: `Please analyze the sentiment of the following text in [${language}] and provide the result with the keywords Positive, Negative or Neutral.`,
+        },
+        {
+          role: "assistant",
+          content: `[${userMsg}]`,
+        },
+      ],
+      temperature: 1,
+      max_tokens: 326,
+      top_p: 1,
+      frequency_penalty: 0,
+      presence_penalty: 0,
+    });
     res.status(200).send({ msg: response.choices[0].message.content });
   } catch (error) {
     res.status(400).send({ error: error });
